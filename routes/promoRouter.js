@@ -1,55 +1,99 @@
 //Implementing the routes for dishes and dishesID
 const express = require('express');//when you define a new file it become is own 
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+const Promotions = require('../models/promotions');
 
 const promoRouter = express.Router();
 
 promoRouter.use(bodyParser.json());
-// handle all the request
+
+// handle all CRUD  operations
+
 promoRouter.route('/')
-.all((req,res,next) => {
-    res.statusCode = 200;
-    res.setHeader('content-type','text/plain');
-    next();
- })
 
- .get((req,res,next) =>{
-    res.end('Will send all the promotions to you');
- })
+    .get((req,res,next) => {
+        Promotions.find({})
+        .then((promotions) => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(promotions);
+        }, (err) => next(err))
+        .catch((err) => next(err));
+        })
 
- .post((req,res,next) =>{
-    res.end('Will add the the promotions:' + req.body.name +
-    'with details: ' +req.body.description);
- })
+    .post((req, res, next) => {
+        Promotions.create(req.body)
+        .then((promo) => {
+        console.log('Promo Created ', promo);
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(promo);
+        }, (err) => next(err))
+        .catch((err) => next(err));
+        })
 
- .put((req,res,next) =>{
-    res.statusCode = 403;
-    res.end('PUT operation not supported on /promotions');
- })
-// remember that deleting is a dangerous operation
+     .put((req, res, next) => {
+            res.statusCode = 403;
+            res.end('PUT operation is not supported on /promotions');
+            })  
 
-// will makes some updates when we learn authentification
- .delete((req,res,next) =>{
-    res.end('Deleting all the promotions ');
- });
+         // remember that deleting is a dangerous operation
+         // do not allow ordinary users to make operation like deletion
+         // will made some updates when we learn authentification
+     .delete((req, res, next) => {
+            Promotions.remove({})
+            .then((resp) => {
+              res.statusCode = 200;
+              res.setHeader('Content-Type', 'application/json');
+              res.json(resp);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+            });
 
- // do not allow ordinary users to make operation like deletion
 
- // New routes
-promoRouter.route('/:promoId')
-.get((req, res, next) => {
-    res.end('Will send details of the promoId: ' + req.params.promoId + ' to you');
-})
-.post((req, res, next) => {
-    res.end('POST operation not supported on /promotions/' + req.params.promoId);
-})
-.put((req, res, next) => {
-    res.write('Update the promoId: ' + req.params.promoId + '\n');
-    res.end('Will update the promoId: ' + req.body.name + ' with details ' + req.body.description);
-})
-.delete((req, res, next) => {
-    res.end('Deleting the promoId: ' + req.params.promoId);
-}); 
+ promoRouter.route('/:promoId')
+
+    .get((req,res,next) => {
+        Promotions.findById(req.params.promoId)
+        .then((promo) => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(promo);
+        }, (err) => next(err))
+        .catch((err) => next(err));
+        })
+
+    .post((req, res, next) => {
+        res.statusCode = 403;
+        res.end('POST operation not supported on /promotions/'+ req.params.promoId);
+        })
+
+    .put((req, res, next) => {
+            Promotions.findByIdAndUpdate(req.params.promoId, {
+                $set: req.body
+                 }, 
+                 { new: true })
+              .then((promo) => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(promo);
+                    }, (err) => next(err))
+              .catch((err) => next(err));
+                    })
+
+    .delete((req, res, next) => {
+        Promotions.findByIdAndRemove(req.params.promoId)
+            .then((resp) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(resp);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+            });
+        
+
 
 module.exports = promoRouter;//exporting everything I need
 

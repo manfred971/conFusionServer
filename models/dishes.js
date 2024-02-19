@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 //adding a new type call currency in my schema
 require('mongoose-currency').loadType(mongoose);
 const Currency = mongoose.Types.Currency;
@@ -23,7 +24,7 @@ var commentSchema = new Schema(
         }
     },
     {
-        timeStamps: true
+        timestamps: true
 
     });
 
