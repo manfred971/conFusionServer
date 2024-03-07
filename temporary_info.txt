@@ -30,3 +30,13 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWRkOTU4ZTVkZjQwZDIwZjQzMDVkYzA
 http://localhost:3000/dishes/65ddb181d854710a18073035/comments
 
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWRkOTU2ZjVkZjQwZDIwZjQzMDVkYmUiLCJpYXQiOjE3MDkwMjk2NDMsImV4cCI6MTcwOTAzMzI0M30.8Afhmobj-pNhJceHMV3zBxPPnTGDb7cMmGAtn7c_Kgs
+
+
+facebook authentication 
+//secret key and Id 
+
+app_ID: 791899409510932
+
+secret_key: 5609d8290ff431110bbf0a45884b865d
+
+///
